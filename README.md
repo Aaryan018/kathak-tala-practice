@@ -2,7 +2,6 @@
 
 A browser-based practice tool for Kathak dancers and musicians. Generates rhythmic tala (taal) cycles with synthesized tabla sounds, adjustable tempo, and a visual theka display.
 
-**Live demo:** [aaryantest.duckdns.org/kathak-taal](http://aaryantest.duckdns.org/kathak-taal)
 
 ## Talas Included
 
