@@ -398,7 +398,7 @@ const bass = new Tone.MembraneSynth({
   octaves: 4,
   oscillator: { type: 'sine' },
   envelope: { attack: 0.001, decay: 0.15, sustain: 0, release: 0.05 }
-}).toDestination();
+});
 
 const sharp = new Tone.MetalSynth({
   frequency: 200,
@@ -407,18 +407,18 @@ const sharp = new Tone.MetalSynth({
   resonance: 800,
   octaves: 1,
   envelope: { attack: 0.001, decay: 0.12, release: 0.01 }
-}).toDestination();
+});
 
 const click = new Tone.NoiseSynth({
   noise: { type: 'white' },
   envelope: { attack: 0.001, decay: 0.025, sustain: 0 }
-}).toDestination();
+});
 
 // Master volume
 const masterVol = new Tone.Volume(-8).toDestination();
-bass.disconnect(); bass.connect(masterVol);
-sharp.disconnect(); sharp.connect(masterVol);
-click.disconnect(); click.connect(masterVol);
+bass.connect(masterVol);
+sharp.connect(masterVol);
+click.connect(masterVol);
 
 let loop = null;
 
