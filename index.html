@@ -615,28 +615,30 @@ function startPlayback() {
 
     loop = new Tone.Loop((time) => {
       const beatDuration = Tone.Time('4n').toSeconds();
-      const bols = tala.theka[currentBeat];
-      const isSam = (currentBeat === 0);
+      const beatIdx = currentBeat;
+      if (beatIdx < 0 || beatIdx >= tala.theka.length) return;
+
+      const bols = tala.theka[beatIdx];
+      const isSam = (beatIdx === 0);
 
       // Play sound
       playBeat(bols, time, beatDuration, isSam);
 
-      // Update UI
-      Tone.Draw.schedule(() => {
-        highlightBeat(currentBeat);
-        document.getElementById('cycleCounter').textContent =
-          `Cycle ${cycleCount + 1} · Beat ${currentBeat + 1}/${tala.matras}`;
+      // Update state for next iteration
+      currentBeat = (beatIdx + 1) % tala.matras;
+      if (currentBeat === 0) cycleCount++;
 
-        currentBeat++;
-        if (currentBeat >= tala.matras) {
-          currentBeat = 0;
-          cycleCount++;
-        }
+      // Update UI (with captured beatIdx to avoid race)
+      Tone.Draw.schedule(() => {
+        highlightBeat(beatIdx);
+        document.getElementById('cycleCounter').textContent =
+          `Cycle ${cycleCount} · Beat ${beatIdx + 1}/${tala.matras}`;
       }, time);
 
     }, '4n');
 
     loop.start(0);
+    Tone.Transport.position = 0;
     Tone.Transport.start();
 
     isPlaying = true;
@@ -646,6 +648,8 @@ function startPlayback() {
 
 function stopPlayback() {
   Tone.Transport.stop();
+  Tone.Transport.cancel(0);
+  Tone.Transport.position = 0;
   if (loop) loop.dispose();
   loop = null;
   currentBeat = 0;
